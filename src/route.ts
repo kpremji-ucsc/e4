@@ -17,44 +17,19 @@ export interface Sector {
   waves: Wave[];
 }
 
-export const ENEMY_STATS: Record<
-  EnemyKind,
-  {
-    hp: number;
-    score: number;
-    radius: number;
-    dropChance: number;
-    canShoot: boolean;
-  }
-> = {
-  drone: {
-    hp: 2,
-    score: 100,
-    radius: 13,
-    dropChance: 0.015,
-    canShoot: true,
-  },
-  dart: {
-    hp: 1,
-    score: 150,
-    radius: 12,
-    dropChance: 0.015,
-    canShoot: false,
-  },
-  turret: {
-    hp: 12,
-    score: 400,
-    radius: 19,
-    dropChance: 0.3,
-    canShoot: true,
-  },
-  lancer: {
-    hp: 4,
-    score: 250,
-    radius: 15,
-    dropChance: 0.06,
-    canShoot: true,
-  },
+export interface PrefabStats {
+  kind: string;
+  hp: number;
+  score: number;
+  radius: number;
+  dropChance: number;
+}
+
+export const ENEMY_STATS: Record<EnemyKind, PrefabStats> = {
+  drone: { kind: "drone", hp: 2, score: 100, radius: 13, dropChance: 0.015 },
+  dart: { kind: "dart", hp: 1, score: 150, radius: 12, dropChance: 0.015 },
+  turret: { kind: "turret", hp: 12, score: 400, radius: 19, dropChance: 0.3 },
+  lancer: { kind: "lancer", hp: 4, score: 250, radius: 15, dropChance: 0.06 },
 };
 
 export const SECTORS: Sector[] = [

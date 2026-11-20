@@ -15,7 +15,7 @@ import { Rng } from "./rng.ts";
 import { loadSounds, play } from "./sounds.ts";
 import { makeTextures, TINTS } from "./textures.ts";
 import { Backdrop } from "./backdrop.ts";
-import { ENEMY_STATS, SECTORS, type Wave } from "./route.ts";
+import { ENEMY_STATS, type EnemyKind, SECTORS, type Wave } from "./route.ts";
 
 const TICK_MS = 1000 / 60;
 const START_LIVES = 3;
@@ -317,22 +317,10 @@ export class GameScene extends Phaser.Scene implements Arena {
     );
   }
 
-  summon(_kind: string, x: number, y: number): void {
+  summon(kind: EnemyKind, x: number, y: number): void {
+    const side = x < WIDTH / 2 ? 1 : -1;
     this.enemies.push(
-      new ShmupPrefabSprite(
-        this,
-        x,
-        y,
-        "drone",
-        2,
-        100,
-        13,
-        0.015,
-        true,
-        false,
-        x,
-        x < WIDTH / 2 ? 1 : -1,
-      ),
+      new ShmupPrefabSprite(this, x, y, ENEMY_STATS[kind], side),
     );
   }
 
@@ -435,7 +423,6 @@ export class GameScene extends Phaser.Scene implements Arena {
   }
 
   private spawnWave(t: number, wave: Wave): void {
-    const stats = ENEMY_STATS[wave.kind];
     const mid = (wave.count - 1) / 2;
 
     for (let i = 0; i < wave.count; i++) {
@@ -466,22 +453,10 @@ export class GameScene extends Phaser.Scene implements Arena {
 
       if (t !== spawnAt) continue;
 
-      const enemy = new ShmupPrefabSprite(
-        this,
-        x,
-        y,
-        wave.kind,
-        stats.hp,
-        stats.score,
-        stats.radius,
-        stats.dropChance,
-        stats.canShoot,
-        false,
-        x,
-        i % 2 === 0 ? 1 : -1,
+      const side = i % 2 === 0 ? 1 : -1;
+      this.enemies.push(
+        new ShmupPrefabSprite(this, x, y, ENEMY_STATS[wave.kind], side),
       );
-
-      this.enemies.push(enemy);
     }
   }
 
